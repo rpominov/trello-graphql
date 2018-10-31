@@ -1,0 +1,424 @@
+enum AvatarSource {
+  upload
+  gravatar
+}
+
+type MemberPrefsTimezoneInfo {
+  timezoneNext: String
+  dateNext: String
+  offsetNext: Int
+  timezoneCurrent: String!
+  offsetCurrent: Int!
+}
+
+type MemberPrefsTwoFactor {
+  enabled: Boolean!
+  needsNewBackups: Boolean!
+}
+
+type MemberPrefs {
+  sendSummaries: Boolean!
+  minutesBetweenSummaries: Int!
+  minutesBeforeDeadlineToNotify: Int!
+  colorBlind: Boolean!
+  locale: String!
+  timezoneInfo: MemberPrefsTimezoneInfo
+  twoFactor: MemberPrefsTwoFactor
+}
+
+type Member {
+  """
+  The ID of the member
+  """
+  id: String!
+
+  """
+  Member profile images are hosted at:
+  `https://trello-avatars.s3.amazonaws.com/{avatarHash}/{size}.png`
+  size can be 30, 50, or 170
+  """
+  avatarHash: String
+
+  """
+  The URL of the current avatar being used,
+  regardless of whether it is a gravatar or uploaded avatar.
+  """
+  avatarUrl: String
+
+  """
+  The source of the user's avatar - either via "upload" or "gravatar".
+  """
+  avatarSource: AvatarSource!
+
+  """
+  Optional bio for the member
+  """
+  bio: String!
+
+  # TODO:
+  # """
+  # If the bio includes custom emoji, this object will contain
+  # the information necessary to display them.
+  # """
+  # bioData: object
+
+  """
+  Whether the member has confirmed their email address after signing up
+  """
+  confirmed: Boolean!
+
+  """
+  The primary email address for the member. You can only read your own.
+  """
+  email: String!
+
+  """
+  The full display name for the member
+  """
+  fullName: String!
+
+  """
+  An array of board IDs this member is on
+  """
+  idBoards: [String!]!
+
+  """
+  An array of organization IDs this member is in
+  """
+  idOrganizations: [String!]!
+
+  """
+  An array of enterprise IDs this member is an admin of
+  """
+  idEnterprisesAdmin: [String!]!
+
+  """
+
+  """
+  idPremOrgsAdmin: [String!]!
+
+  """
+  The member's initials, used for display when there isn't an avatar set
+  """
+  initials: String!
+
+  """
+  The types of logins a user
+  One of: "password", "saml"
+  """
+  loginTypes: [String!]!
+
+  """
+  One of: "normal", "ghost"
+  A ghost is an individual who has been invited to join
+  but has not yet created a Trello account.
+  """
+  memberType: String
+
+  """
+
+  """
+  oneTimeMessagesDismissed: [String!]!
+
+  """
+
+  """
+  prefs: MemberPrefs!
+
+  # TODO
+  # premiumFeatures: [?]
+
+  """
+  `10` - member has Trello Gold as a result of being in a Business Class team
+  `37` - member has monthly Trello Gold
+  `38` - member has annual Trello Gold
+  """
+  products: [Int!]!
+
+  """
+  The URL to the member's profile page
+  """
+  url: String!
+
+  """
+  The username for the member. What is shown in `@mentions` for example
+  """
+  username: String!
+
+  """
+  Lists the boards a member has access to
+  """
+  boards(filter: [String!]): [Board!]!
+
+  """
+  Gets the cards a member is on
+  """
+  cards(filter: [String!]): [Card!]!
+}
+
+type ImageWithDim {
+  width: Int!
+  height: Int!
+  url: String!
+}
+
+type Board {
+  """
+  The ID of the board
+  """
+  id: String!
+
+  """
+  The name of the board
+  """
+  name: String!
+
+  """
+  Boolean whether the board has been closed or not
+  """
+  closed: Boolean!
+
+  """
+  MongoID of the organization to which the board belongs
+  """
+  idOrganization: String
+
+  """
+  Boolean whether the board has been pinned or not.
+  """
+  pinned: Boolean!
+
+  """
+  Persistent URL for the board
+  """
+  url: String!
+
+  """
+  URL for the board using only its shortMongoID
+  """
+  shortUrl: String!
+
+  # """Short for "preferences", these are the settings for the board"""
+  # prefs: TODO
+
+  # """
+  # Object containing color keys and the label names given
+  # for one label of each color on the board. To get a full
+  # list of labels on the board see `/boards/{id}/labels/`.
+  # """
+  # labelNames: TODO
+
+  """
+  Whether the board has been starred by the current request's user
+  """
+  starred: Boolean!
+
+  # """
+  # An object containing information on the limits that exist for the board.
+  # Read more about at [Limits](https://developers.trello.com/docs/limits)
+  # """
+  # limits: TODO
+
+  # """
+  # Array of objects that represent the relationship
+  # of users to this board as [memberships](https://developers.trello.com/reference#boardsidmemberships).
+  # """
+  # memberships: [TODO]
+}
+
+type List {
+  """
+  The ID of the list
+  """
+  id: String!
+
+  """
+  The name of the list
+  """
+  name: String!
+
+  """
+  Whether the list is closed (archived)
+  """
+  closed: Boolean!
+
+  """
+  The ID of the board the list is on
+  """
+  idBoard: String!
+
+  """
+  The position of the list on the board
+  """
+  pos: Float!
+
+  """
+  Whether the member is subscribed to this list
+  """
+  subscribed: Boolean!
+}
+
+type Card {
+  """
+  The ID of the card
+  """
+  id: String!
+
+  # TODO
+  # """
+  # Pieces of information about the card that are displayed on the front of the card.
+  # "badges": {
+  #     "votes": 0,
+  #     "viewingMemberVoted": false,
+  #     "subscribed": true,
+  #     "fogbugz": "",
+  #     "checkItems": 0,
+  #     "checkItemsChecked": 0,
+  #     "comments": 1,
+  #     "attachments": 2,
+  #     "description": true,
+  #     "due": null,
+  #     "dueComplete": false
+  #   }
+  # """
+  # badges: object
+
+  # TODO
+  # checkItemStates: [?]
+
+  """
+  Whether the card is closed (archived).
+  Note: Archived lists and boards do not cascade archives to cards.
+  A card can have closed: false but be on an archived board.
+  """
+  closed: Boolean!
+
+  """
+  The datetime of the last activity on the card.
+  Note: There are activities that update dateLastActivity
+  that do not create a corresponding action. For instance,
+  updating the name field of a checklist item on a card
+  does not create an action but does update the card and
+  board's dateLastActivity value.
+  """
+  dateLastActivity: String!
+
+  """
+  The description for the card. Up to 16384 chars.
+  """
+  desc: String!
+
+  # TODO
+  # """
+  # If the description has custom emoji, this field will provide the data necessary to display them.
+  # "descData": {
+  #   "emoji": {
+  #     "morty": "https://...png"
+  #   }
+  # }
+  # """
+  # descData: object
+
+  """
+  The due date on the card, if one exists
+  """
+  due: String
+
+  """
+  Whether the due date has been marked complete
+  """
+  dueComplete: Boolean!
+
+  """
+  The id of the attachment selected as the cover image, if one exists
+  """
+  idAttachmentCover: String
+
+  """
+  The ID of the board the card is on
+  """
+  idBoard: String!
+
+  """
+  An array of checklist IDs that are on this card
+  """
+  idChecklists: [String!]!
+
+  """
+  An array of label IDs that are on this card
+  """
+  idLabels: [String!]!
+
+  """
+  The ID of the list the card is in
+  """
+  idList: [String!]!
+
+  """
+  An array of member IDs that are on this card
+  """
+  idMembers: [String!]!
+
+  """
+  An array of member IDs who have voted on this card
+  """
+  idMembersVoted: [String!]!
+
+  """
+  Numeric ID for the card on this board. Only unique to the board,
+  and subject to change as the card moves
+  """
+  idShort: Int
+
+  # TODO
+  # """
+  # Array of label objects on this card
+  # """
+  # labels: [Label!]!
+
+  """
+  Whether the card cover image was selected automatically by Trello,
+  or manually by the user
+  """
+  manualCoverAttachment: Boolean!
+
+  """
+  Name of the card
+  """
+  name: String!
+
+  """
+  Position of the card in the list
+  """
+  pos: Float!
+
+  """
+  The 8 character shortened ID for the card
+  """
+  shortLink: String!
+
+  """
+  URL to the card without the name slug
+  """
+  shortUrl: String!
+
+  """
+  Whether this member is subscribed to the card
+  """
+  subscribed: Boolean!
+
+  """
+  Full URL to the card, with the name slug
+  """
+  url: String!
+}
+
+type Query {
+  """
+  You can use `"me"` as an `id`
+  """
+  member(id: String!): Member
+  board(id: String!): Board
+  list(id: String!): List
+  card(id: String!): Card
+}

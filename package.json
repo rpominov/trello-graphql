@@ -1,0 +1,19 @@
+{
+  "name": "trello-graphql",
+  "version": "0.1.0",
+  "description": "GraphQL wrapper for Trello API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.1.0",
+    "graphql": "^14.0.2",
+    "node-fetch": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.5"
+  }
+}
